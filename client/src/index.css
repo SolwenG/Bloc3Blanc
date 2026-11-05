@@ -83,3 +83,62 @@ input:focus, textarea:focus {
   background: var(--primary-hover);
   transform: translateY(-1px);
 }
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.comment-content {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.comment-content > * + * {
+  margin-top: 10px;
+}
+
+.comment-content h1,
+.comment-content h2,
+.comment-content h3,
+.comment-content h4,
+.comment-content h5,
+.comment-content h6 {
+  font-size: 1.1rem;
+}
+
+.comment-content a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.comment-content ul,
+.comment-content ol {
+  padding-left: 24px;
+}
+
+.comment-content blockquote {
+  padding-left: 12px;
+  border-left: 3px solid var(--primary);
+  color: var(--text-muted);
+}
+
+.comment-content code {
+  padding: 2px 5px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.comment-content pre {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.comment-content pre code {
+  padding: 0;
+  background: none;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import API, { API_URL } from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+import CommentSection from '../components/CommentSection';
 import { Edit, Trash2, Calendar, User } from 'lucide-react';
 
 const ArticleDetail = () => {
@@ -83,6 +84,8 @@ const ArticleDetail = () => {
                     {article.content}
                 </div>
             </article>
+
+            <CommentSection articleId={id} />
         </div>
     );
 };
