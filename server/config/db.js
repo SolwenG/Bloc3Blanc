@@ -56,35 +56,47 @@ const initDB = async () => {
                 );
             `);
 
-            // SEEDING LOGIC
-            const [users] = await pool.query('SELECT * FROM users LIMIT 1');
-            if (users.length === 0) {
-                console.log('Seeding default user...');
-                const hashedPassword = await bcrypt.hash('password123', 10);
-                const [userResult] = await pool.query(
-                    'INSERT INTO users (username, email, password, bio) VALUES (?, ?, ?, ?)',
-                    ['admin', 'admin@blog.com', hashedPassword, 'Administrateur du blog par défaut.']
+            await pool.query(`
+                CREATE TABLE IF NOT EXISTS comments (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    content TEXT NOT NULL,
+                    article_id INT NOT NULL,
+                    user_id INT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 );
-                const adminId = userResult.insertId;
+            `);
 
-                console.log('Seeding default articles...');
-                await pool.query(
-                    'INSERT INTO articles (title, content, user_id) VALUES (?, ?, ?), (?, ?, ?)',
-                    [
-                        'Bienvenue sur votre nouveau Blog',
-                        'Ceci est votre premier article généré automatiquement. Vous pouvez le modifier ou le supprimer depuis votre tableau de bord.',
-                        adminId,
-                        'Maîtriser Node.js et MySQL',
-                        'Node.js et MySQL forment un duo puissant pour la création d\'applications web robustes et scalables...',
-                        adminId
-                    ]
-                );
-            }
+                       // SEEDING LOGIC
+                       const [users] = await pool.query('SELECT * FROM users LIMIT 1');
+                       if (users.length === 0) {
+                           console.log('Seeding default user...');
+                           const hashedPassword = await bcrypt.hash('password123', 10);
+                           const [userResult] = await pool.query(
+                               'INSERT INTO users (username, email, password, bio) VALUES (?, ?, ?, ?)',
+                               ['admin', 'admin@blog.com', hashedPassword, 'Administrateur du blog par défaut.']
+                           );
+                           const adminId = userResult.insertId;
 
-            console.log('Database and tables initialized successfully.');
-            authenticated = true;
-        } catch (err) {
-            console.log(`Database connection failed, retrying in 3s... (${retries} attempts left)`);
+                           console.log('Seeding default articles...');
+                           await pool.query(
+                               'INSERT INTO articles (title, content, user_id) VALUES (?, ?, ?), (?, ?, ?)',
+                               [
+                                   'Bienvenue sur votre nouveau Blog',
+                                   'Ceci est votre premier article généré automatiquement. Vous pouvez le modifier ou le supprimer depuis votre tableau de bord.',
+                                   adminId,
+                                   'Maîtriser Node.js et MySQL',
+                                   'Node.js et MySQL forment un duo puissant pour la création d\'applications web robustes et scalables...',
+                                   adminId
+                               ]
+                           );
+                       }
+
+                       console.log('Database and tables initialized successfully.');
+                       authenticated = true;
+                   } catch (err) {
+                       console.log(`Database connection failed, retrying in 3s... (${retries} attempts left)`);
             // Specific check for protocol connection lost or refused
             retries--;
             if (retries === 0) {
