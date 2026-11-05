@@ -36,7 +36,8 @@ exports.createArticle = async (req, res) => {
         const image = req.file ? `/uploads/${req.file.filename}` : null;
 
         const [result] = await pool.query(
-            `INSERT INTO articles (title, content, image, user_id) VALUES (${title}, ${content}, ${image}, ${req.userId})`,
+            'INSERT INTO articles (title, content, image, user_id) VALUES (?, ?, ?, ?)',
+            [title, content, image, req.userId]
         );
 
         res.status(201).json({ id: result.insertId, title, content, image });
@@ -53,7 +54,7 @@ exports.updateArticle = async (req, res) => {
         if (articles.length === 0) return res.status(404).json({ message: 'Article not found' });
         if (articles[0].user_id !== req.userId) return res.status(403).json({ message: 'Not authorized' });
 
-        const image = req.file ? `/ uploads / ${req.file.filename}` : articles[0].image;
+        const image = req.file ? `/uploads/${req.file.filename}` : articles[0].image;
 
         await pool.query(
             'UPDATE articles SET title = ?, content = ?, image = ? WHERE id = ?',

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../api/axios';
 import { LogOut, User, PlusSquare, Home } from 'lucide-react';
 
 const Navbar = () => {
@@ -31,7 +32,7 @@ const Navbar = () => {
                             <Link to={`/profile/${user.id}`} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 {user.avatar ? (
                                     <img
-                                        src={`http://localhost:5000${user.avatar}`}
+                                        src={`${API_URL}${user.avatar}`}
                                         alt="avatar"
                                         style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
                                     />

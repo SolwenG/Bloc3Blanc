@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import API from '../api/axios';
+import API, { API_URL } from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { Edit, User as UserIcon, Calendar, Mail } from 'lucide-react';
 
@@ -35,7 +35,7 @@ const Profile = () => {
                 <div style={{ position: 'relative', width: '150px', height: '150px', margin: '0 auto 20px' }}>
                     {profile.avatar ? (
                         <img
-                            src={`http://localhost:5000${profile.avatar}`}
+                            src={`${API_URL}${profile.avatar}`}
                             alt={profile.username}
                             style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '4px solid var(--primary)' }}
                         />
